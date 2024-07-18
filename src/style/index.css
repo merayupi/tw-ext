@@ -1,0 +1,73 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.popup-layout {
+    height: 400px;
+    width: 100%;
+    /* background-color: transparent; */
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 4px;
+    margin: auto;
+    position: fixed;
+    /* Ensuring the modal is fixed on the viewport */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Center the modal in the viewport */
+    z-index: 9999;
+    /* Ensure modal is above all content */
+    /* Optional: Add a semi-transparent background overlay */
+    box-shadow: 0 0 0 100vh rgba(0, 0, 0, 0.5);
+    /* background-color: #172131; */
+
+}
+
+.result {
+    box-sizing: border-box;
+    /* ensures padding and border are included in total width/height */
+    border: transparent;
+    border-radius: inherit;
+    display: flex;
+    /* padding: 0px 30px; */
+    flex-direction: column;
+    width: 95%;
+    height: 100%;
+    overflow-y: scroll;
+    /* gap: 20px; */
+
+    /* border-color: #4A5568; */
+
+}
+
+/* Scrollbar styling to remove/hide it */
+.alerts-inner-layout::-webkit-scrollbar {
+    display: none;
+}
+
+.alerts-inner-layout {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Medium screen styles */
+@media (min-width: 768px) {
+    .popup-layout {
+        height: 550px;
+        width: 550px;
+    }
+
+}
+
+/* Large screen styles */
+@media (min-width: 1024px) {
+    .popup-layout {
+        height: 600px;
+        width: 650px;
+    }
+}
