@@ -123,72 +123,57 @@ const createModalUI = () => {
 }
 
 const getAllHistoryUsername = async (username) => {
-    // const id = 11111111;
-    // const response = await fetch(`http://localhost:3000/twitter-users/id/${id}`, {
-    //     method: "get",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    // });
-    
-    // const data = await response.json();
-    // return data;
+
 }
 
-const getAllFollowers = async (username, cursor = -1, followers = []) => {
-    try {
-        const url = new URL('https://api.twitter.com/1.1/followers/list.json');
-        url.search = new URLSearchParams({
-          'cursor': cursor,
-          'screen_name': username,
-          'count': 200,
-          'skip_status': true,
-          'include_user_entities': false,
-        }).toString();
-    
-        const res = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'
-          }
-        });
-    
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+const getAllFollowers = async (username, maxConcurrent = 5) => {
+    const fetchFollowers = async (cursor) => {
+      const url = new URL('https://api.twitter.com/1.1/followers/list.json');
+      url.search = new URLSearchParams({
+        cursor,
+        screen_name: username,
+        count: 200,
+        skip_status: true,
+        include_user_entities: false,
+      }).toString();
+  
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'
         }
+      });
+  
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  
+      return res.json();
+    };
+  
+    let allFollowers = [];
+    let cursors = [-1];
     
-        const data = await res.json();
+    while (cursors.length > 0) {
+      const batch = cursors.splice(0, maxConcurrent);
+      const responses = await Promise.all(batch.map(fetchFollowers));
+      
+      for (const { users, next_cursor } of responses) {
+        allFollowers.push(...users.map(user => ({
+          id: user.id_str,
+          name: user.name,
+          username: user.screen_name,
+          bio: user.description,
+          follower: user.followers_count,
+          following: user.friends_count,
+          pfp: user.profile_image_url_https,
+          post: user.statuses_count,
+          age: `<t:${Math.floor(new Date(user.created_at).getTime() / 1000)}:R>`
+        })));
         
-        const newData = data.users.map(user => {
-          const date = new Date(user.created_at);
-          const unixTimestamp = Math.floor(date.getTime() / 1000);
-          const created = `<t:${unixTimestamp}:R>`;
-          return {
-            id: user.id_str,
-            name: user.name,
-            username: user.screen_name,
-            bio: user.description,
-            follower: user.followers_count,
-            following: user.friends_count,
-            pfp: user.profile_image_url_https,
-            post: user.statuses_count,
-            age: created
-          };
-        });
-    
-        followers = followers.concat(newData);
-    
-        if (data.next_cursor) {
-          return await getAllFollowers(username, data.next_cursor, followers);
-        } else {
-          return followers;
-        }
-      } catch (e) {
-        console.error("An error occurred:", e);
-        throw e;
+        if (next_cursor) cursors.push(next_cursor);
       }
-};
-
+    }
+  
+    return allFollowers;
+  };
 const createUIResult = async (username, result) => {
     let outputHTML = '';
     const usernames = await getAllHistoryUsername(username);
@@ -211,8 +196,14 @@ const createUIResult = async (username, result) => {
 }
 
 const createUIFirstFollowerResult = async (username, result) => {
+    const loading = document.createElement("div");
+    loading.classList.add("loader");
+    result.appendChild(loading);
+
     const followers = await getAllFollowers(username);
-    const firstfollowers = followers.slice(-30).reverse();
+    const firstfollowers = followers.slice(-80).reverse();
+
+    loading.remove();
     let outputHTML = '';
 
     firstfollowers.forEach(user => {
