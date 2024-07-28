@@ -2,12 +2,12 @@ const attachButton = async (username) => {
     const element = document.querySelector("div[data-testid='UserName'] div:nth-child(2) span");
     const element2 = document.querySelector("#react-root > div > div > div.css-175oi2r.r-1f2l425.r-13qz1uu.r-417010.r-18u37iz > main > div > div > div > div.css-175oi2r.r-kemksi.r-1kqtdi0.r-1ua6aaf.r-th6na.r-1phboty.r-16y2uox.r-184en5c.r-1c4cdxw.r-1t251xo.r-f8sm7e.r-13qz1uu.r-1ye8kvj > div > div:nth-child(3) > div > div > div > div.css-175oi2r.r-3pj75a.r-ttdzmv.r-1ifxtd0 > div.css-175oi2r.r-13awgt0.r-18u37iz.r-1w6e6rj > div:nth-child(2)");
 
-    if (element2) {
-        const existingButton = element.parentNode.querySelector('.recentfollowing-btn');
+    if (element) {
+        const existingButton = element.parentNode.querySelector('.firstfollower-btn');
         if (existingButton) {
             existingButton.remove();
         }
-        const existingButton2 = element2.parentNode.querySelector('.firstfollower-btn');
+        const existingButton2 = element2.parentNode.querySelector('.recentfollowing-btn');
         if (existingButton2) {
             existingButton2.remove();
         }
@@ -19,7 +19,7 @@ const attachButton = async (username) => {
         button3.className = "recentfollowing-btn";
 
         element2.parentNode.appendChild(button2);
-        button2.parentNode.appendChild(button3);
+        element2.parentNode.appendChild(button3);
     }
 }
 
@@ -266,7 +266,7 @@ const createUIRecentFollowingResult = async (username, result) => {
     result.appendChild(loading);
 
     const followings = await getAllFollowing(username);
-    const recentfollowing = followings.slice(0,80);
+    const recentfollowing = followings.slice(0,100);
 
     loading.remove();
     let outputHTML = '';
