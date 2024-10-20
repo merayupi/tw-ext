@@ -1,8 +1,9 @@
 const attachButton = async (username) => {
     const element = document.querySelector("div[data-testid='UserName'] div:nth-child(2) span");
-    const element2 = document.querySelector("#react-root > div > div > div.css-175oi2r.r-1f2l425.r-13qz1uu.r-417010.r-18u37iz > main > div > div > div > div.css-175oi2r.r-kemksi.r-1kqtdi0.r-1ua6aaf.r-th6na.r-1phboty.r-16y2uox.r-184en5c.r-1c4cdxw.r-1t251xo.r-f8sm7e.r-13qz1uu.r-1ye8kvj > div > div:nth-child(3) > div > div > div > div.css-175oi2r.r-3pj75a.r-ttdzmv.r-1ifxtd0 > div.css-175oi2r.r-13awgt0.r-18u37iz.r-1w6e6rj > div:nth-child(2)");
-  
+    const element2 = document.querySelector("#react-root > div > div > div.css-175oi2r.r-1f2l425.r-13qz1uu.r-417010.r-18u37iz > main > div > div > div > div.css-175oi2r.r-kemksi.r-1kqtdi0.r-1ua6aaf.r-th6na.r-1phboty.r-16y2uox.r-184en5c.r-1abdc3e.r-1lg4w6u.r-f8sm7e.r-13qz1uu.r-1ye8kvj > div > div:nth-child(3) > div > div > div > div > div.css-175oi2r.r-13awgt0.r-18u37iz.r-1w6e6rj > div:nth-child(2)");
+    
     if (element2) {
+        console.log(element2);
         const existingButton = element2.parentNode.querySelector('.firstfollower-btn');
         const existingButton2 = element2.parentNode.querySelector('.recentfollowing-btn');
         if (existingButton && existingButton2) {
@@ -241,7 +242,7 @@ const attachButton = async (username) => {
         outputHTML += ` <div class="container-content">
                             <a href="https://twitter.com/${user.username}" target="_blank"><img src="${user.pfp}" alt="pfp"></a>
                             <div class="content">
-                                <h2 class="username"><a href="https://twitter.com/${user.username}" target="_blank">${user.username} |  Follower: ${user.follower} | Following: ${user.following}</h2></a>
+                                <h2 class="username"><a href="https://twitter.com/${user.username}" target="_blank">${user.username}</a> |  Follower: ${user.follower}</h2>
                                 <p class="bio">${user.bio}</p>
                             </div>
                         </div>`;
@@ -269,7 +270,7 @@ const attachButton = async (username) => {
         outputHTML += ` <div class="container-content">
                             <a href="https://twitter.com/${user.username}" target="_blank"><img src="${user.pfp}" alt="pfp"></a>
                             <div class="content">
-                                <h2 class="username"><a href="https://twitter.com/${user.username}" target="_blank">${user.username} |  Follower: ${user.follower} | Following: ${user.following}</h2></a>
+                                <h2 class="username"><a href="https://twitter.com/${user.username}" target="_blank">${user.username}</a> |  Follower: ${user.follower}</h2>
                                 <p class="bio">${user.bio}</p>
                             </div>
                         </div>`;
